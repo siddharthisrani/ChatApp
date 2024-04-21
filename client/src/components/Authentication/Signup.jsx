@@ -30,36 +30,7 @@ const Signup = () => {
   const postDetails = (pics) => {
     setPicLoading(true);
     if (pics === undefined) {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      return;
-    }
-    console.log(pics);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "chat-app");
-      data.append("cloud_name", "dvakewn1g");
-      fetch("https://api.cloudinary.com/v1_1/dvakewn1g/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-          console.log(data.url.toString());
-          setPicLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setPicLoading(false);
-        });
-    } else {
+      // Handle case where no image is selected
       toast({
         title: "Please Select an Image!",
         status: "warning",
@@ -70,7 +41,60 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
+    console.log("Selected image:", pics);
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "dh847osw");
+      data.append("cloud_name", "dot3gbmab");
+      fetch("https://api.cloudinary.com/v1_1/dot3gbmab/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Cloudinary response:", data);
+          if (data.url) {
+            setPic(data.url.toString());
+            console.log("Image URL:", data.url.toString());
+          } else {
+            console.error("Cloudinary error:", data);
+            toast({
+              title: "Error Uploading Image",
+              description: "An error occurred while uploading the image.",
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom",
+            });
+          }
+          setPicLoading(false);
+        })
+        .catch((err) => {
+          console.error("Fetch error:", err);
+          toast({
+            title: "Error Uploading Image",
+            description: "An error occurred while uploading the image.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
+          setPicLoading(false);
+        });
+    } else {
+      // Handle case where selected file is not an image
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+    }
   };
+  
 
   const submitHandler = async () => {
     setPicLoading(true);
@@ -221,4 +245,4 @@ const Signup = () => {
 
 export default Signup;
 
-//https://api.cloudinary.com/v1_1/dvakewn1g/image/upload
+
