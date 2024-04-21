@@ -13,8 +13,15 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",
+    credential: true,
+    methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
   })
 );
+app.options("",cors({
+   origin: "*",
+    credential: true,
+    methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
+}));
 dotenv.config();
 connectDB();
 
